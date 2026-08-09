@@ -37,22 +37,21 @@ async function gh(path) {
   return res.json();
 }
 
-/** Count merged PRs authored by USER into repositories NOT owned by USER. */
+/**
+ * Count merged PRs authored by USER into repositories NOT owned by USER.
+ *
+ * Uses the search API's authoritative `total_count` and takes the difference:
+ *   all merged PRs by USER  −  merged PRs into USER-owned repos (`user:`)
+ * instead of enumerating result items. The search index is eventually
+ * consistent, so paging through items can miss or double-count across runs;
+ * total_count subtraction is stable and index-authoritative.
+ */
 async function countExternalMergedPRs() {
-  let total = 0;
-  let page = 1;
-  for (;;) {
-    const data = await gh(
-      `/search/issues?q=author:${USER}+type:pr+is:merged&per_page=100&page=${page}`,
-    );
-    for (const item of data.items) {
-      const repo = item.repository_url ?? "";
-      if (!repo.includes(`/vianbas/`)) total++;
-    }
-    if (data.items.length < 100 || page >= 10) break; // search API caps at 1000
-    page++;
-  }
-  return total;
+  const [all, own] = await Promise.all([
+    gh(`/search/issues?q=author:${USER}+type:pr+is:merged&per_page=1`),
+    gh(`/search/issues?q=author:${USER}+type:pr+is:merged+user:${USER}&per_page=1`),
+  ]);
+  return all.total_count - own.total_count;
 }
 
 const [user, externalMerged] = await Promise.all([
