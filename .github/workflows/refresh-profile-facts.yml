@@ -1,0 +1,48 @@
+name: Refresh Profile Facts
+
+on:
+  schedule:
+    # Daily 06:30 UTC — keep the README facts table fresh without manual edits.
+    - cron: "30 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-profile-facts
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    name: Refresh GitHub facts
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Regenerate facts in README.md
+        run: node scripts/refresh-profile-facts.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and push if changed
+        id: commit
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "No facts changed — nothing to commit"
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "chore: refresh profile facts"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
