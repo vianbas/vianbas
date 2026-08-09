@@ -40,18 +40,46 @@ async function gh(path) {
 /**
  * Count merged PRs authored by USER into repositories NOT owned by USER.
  *
- * Uses the search API's authoritative `total_count` and takes the difference:
- *   all merged PRs by USER  −  merged PRs into USER-owned repos (`user:`)
- * instead of enumerating result items. The search index is eventually
- * consistent, so paging through items can miss or double-count across runs;
- * total_count subtraction is stable and index-authoritative.
+ * Uses the GraphQL `User.pullRequests(states: MERGED)` connection — the PRs
+ * authored by the user, read directly from the database (not the search
+ * index). The search REST API is eventually consistent: item enumeration
+ * returned 1, 2, or 4 across runs, and even `total_count` subtraction gave a
+ * different result in CI than locally. GraphQL paginates the authoritative
+ * connection and is stable across runs and environments.
  */
 async function countExternalMergedPRs() {
-  const [all, own] = await Promise.all([
-    gh(`/search/issues?q=author:${USER}+type:pr+is:merged&per_page=1`),
-    gh(`/search/issues?q=author:${USER}+type:pr+is:merged+user:${USER}&per_page=1`),
-  ]);
-  return all.total_count - own.total_count;
+  let external = 0;
+  let cursor = null;
+  for (let pages = 0; pages < 20; pages++) {
+    const query = `query($login:String!,$cursor:String){
+      user(login:$login){
+        pullRequests(states: MERGED, first: 100, after: $cursor){
+          totalCount
+          pageInfo{ hasNextPage endCursor }
+          nodes{ repository{ owner{ login } } }
+        }
+      }
+    }`;
+    const res = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+        "Content-Type": "application/json",
+        "User-Agent": "vianbas-profile-facts-refresh",
+      },
+      body: JSON.stringify({ query, variables: { login: USER, cursor } }),
+    });
+    if (!res.ok) throw new Error(`GraphQL → HTTP ${res.status}`);
+    const json = await res.json();
+    const pr = json?.data?.user?.pullRequests;
+    if (!pr) throw new Error(`GraphQL: ${JSON.stringify(json.errors)}`);
+    for (const node of pr.nodes) {
+      if (node.repository.owner.login !== USER) external++;
+    }
+    if (!pr.pageInfo.hasNextPage) break;
+    cursor = pr.pageInfo.endCursor;
+  }
+  return external;
 }
 
 const [user, externalMerged] = await Promise.all([
