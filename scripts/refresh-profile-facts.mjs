@@ -38,7 +38,7 @@ async function gh(path) {
 }
 
 /**
- * Count merged PRs authored by USER into repositories NOT owned by USER.
+ * Count merged PRs authored by USER into PUBLIC repositories NOT owned by USER.
  *
  * Uses the GraphQL `User.pullRequests(states: MERGED)` connection — the PRs
  * authored by the user, read directly from the database (not the search
@@ -46,6 +46,11 @@ async function gh(path) {
  * returned 1, 2, or 4 across runs, and even `total_count` subtraction gave a
  * different result in CI than locally. GraphQL paginates the authoritative
  * connection and is stable across runs and environments.
+ *
+ * Only PUBLIC repositories count. The GITHUB_TOKEN installation token used in
+ * CI cannot see PRs into private repositories, while a personal access token
+ * can — so filtering to public repos makes the result deterministic no matter
+ * which token runs the workflow, and it stays verifiable by profile visitors.
  */
 async function countExternalMergedPRs() {
   let external = 0;
@@ -56,7 +61,9 @@ async function countExternalMergedPRs() {
         pullRequests(states: MERGED, first: 100, after: $cursor){
           totalCount
           pageInfo{ hasNextPage endCursor }
-          nodes{ repository{ owner{ login } } }
+          nodes{
+            repository{ owner{ login } isPrivate }
+          }
         }
       }
     }`;
@@ -74,7 +81,8 @@ async function countExternalMergedPRs() {
     const pr = json?.data?.user?.pullRequests;
     if (!pr) throw new Error(`GraphQL: ${JSON.stringify(json.errors)}`);
     for (const node of pr.nodes) {
-      if (node.repository.owner.login !== USER) external++;
+      const repo = node.repository;
+      if (repo.owner.login !== USER && repo.isPrivate !== true) external++;
     }
     if (!pr.pageInfo.hasNextPage) break;
     cursor = pr.pageInfo.endCursor;
