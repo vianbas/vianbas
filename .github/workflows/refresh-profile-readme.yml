@@ -1,8 +1,8 @@
-name: Refresh Profile Facts
+name: Refresh Profile README
 
 on:
   schedule:
-    # Daily 06:30 UTC — keep the README facts table fresh without manual edits.
+    # Daily 06:30 UTC — keep the README facts table and Open Source section fresh.
     - cron: "30 6 * * *"
   workflow_dispatch:
 
@@ -10,12 +10,12 @@ permissions:
   contents: write
 
 concurrency:
-  group: refresh-profile-facts
+  group: refresh-profile-readme
   cancel-in-progress: false
 
 jobs:
   refresh:
-    name: Refresh GitHub facts
+    name: Refresh profile data
     runs-on: ubuntu-latest
 
     steps:
@@ -27,8 +27,13 @@ jobs:
         with:
           node-version: 20
 
-      - name: Regenerate facts in README.md
+      - name: Regenerate GitHub facts table
         run: node scripts/refresh-profile-facts.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Regenerate Open Source section
+        run: node scripts/refresh-open-source.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -42,7 +47,7 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git add README.md
-            git commit -m "chore: refresh profile facts"
+            git commit -m "chore: refresh profile README"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
