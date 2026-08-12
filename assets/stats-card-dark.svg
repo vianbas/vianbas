@@ -1,0 +1,30 @@
+<svg width="400" height="272" viewBox="0 0 400 272" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.5" y="0.5" width="399" height="271" rx="12" fill="#0D1117" stroke="#30363D" />
+  <text x="18" y="30" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="16" font-weight="700" fill="#E6EDF3">GitHub Stats</text>
+  <rect x="18" y="42" width="364" height="1.5" fill="#21262D" />
+
+  <circle cx="18" cy="62" r="3" fill="#58A6FF" />
+  <text x="34" y="66" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" fill="#8B949E">Total Stars</text>
+  <text x="382" y="66" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" font-weight="700" fill="#58A6FF" text-anchor="end">4</text>
+
+  <circle cx="18" cy="92" r="3" fill="#58A6FF" />
+  <text x="34" y="96" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" fill="#8B949E">Repositories</text>
+  <text x="382" y="96" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" font-weight="700" fill="#58A6FF" text-anchor="end">42</text>
+
+  <circle cx="18" cy="122" r="3" fill="#58A6FF" />
+  <text x="34" y="126" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" fill="#8B949E">Followers</text>
+  <text x="382" y="126" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" font-weight="700" fill="#58A6FF" text-anchor="end">7</text>
+
+  <circle cx="18" cy="152" r="3" fill="#58A6FF" />
+  <text x="34" y="156" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" fill="#8B949E">Following</text>
+  <text x="382" y="156" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" font-weight="700" fill="#58A6FF" text-anchor="end">17</text>
+
+  <circle cx="18" cy="182" r="3" fill="#58A6FF" />
+  <text x="34" y="186" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" fill="#8B949E">External PRs merged</text>
+  <text x="382" y="186" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" font-weight="700" fill="#58A6FF" text-anchor="end">4</text>
+
+  <circle cx="18" cy="212" r="3" fill="#58A6FF" />
+  <text x="34" y="216" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" fill="#8B949E">Member since</text>
+  <text x="382" y="216" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="14" font-weight="700" fill="#58A6FF" text-anchor="end">2015</text>
+  <text x="18" y="258" font-family="'Segoe UI', -apple-system, Ubuntu, sans-serif" font-size="10" fill="#484F58">auto-generated via GitHub Actions</text>
+</svg>
