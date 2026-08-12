@@ -17,6 +17,11 @@ clearing, dispute management, payment gateways) plus freelance e-commerce builds
 
 [![GitHub Streak](https://streak-stats.demolab.com/?user=vianbas)](https://github.com/vianbas)
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/stats-card-dark.svg">
+  <img alt="GitHub Stats" src="assets/stats-card-light.svg">
+</picture>
+
 | GitHub facts | |
 |---|---|
 | 💻 Public repositories | 42 |
