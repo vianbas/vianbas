@@ -67,13 +67,15 @@ jobs:
       - name: Commit and push if changed
         id: commit
         run: |
-          if git diff --quiet -- README.md assets/; then
+          # Stage everything first so newly-generated (untracked) SVG cards
+          # from the action are included — `git diff` alone misses untracked files.
+          git add -A
+          if git diff --cached --quiet; then
             echo "No facts changed — nothing to commit"
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add README.md assets/
             git commit -m "chore: refresh profile README"
             git push
             echo "changed=true" >> "$GITHUB_OUTPUT"
