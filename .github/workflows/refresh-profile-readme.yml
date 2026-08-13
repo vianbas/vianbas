@@ -2,7 +2,7 @@ name: Refresh Profile README
 
 on:
   schedule:
-    # Daily 06:30 UTC — keep the README facts table and Open Source section fresh.
+    # Daily 06:30 UTC — keep the README facts table and stats cards fresh.
     - cron: "30 6 * * *"
   workflow_dispatch:
 
@@ -32,15 +32,37 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Regenerate Open Source section
-        run: node scripts/refresh-open-source.mjs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate stats card (dark)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: username=vianbas&show_icons=true&hide_rank=true&bg_color=0D1117
+          path: assets/stats-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Regenerate stats cards
-        run: node scripts/refresh-stats-card.mjs
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate stats card (light)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: stats
+          options: username=vianbas&show_icons=true&hide_rank=true&bg_color=ffffff
+          path: assets/stats-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate top languages (dark)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=vianbas&layout=compact&langs_count=6&bg_color=0D1117
+          path: assets/top-langs-dark.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate top languages (light)
+        uses: stats-organization/github-readme-stats-action@v2
+        with:
+          card: top-langs
+          options: username=vianbas&layout=compact&langs_count=6&bg_color=ffffff
+          path: assets/top-langs-light.svg
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit and push if changed
         id: commit

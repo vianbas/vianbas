@@ -18,8 +18,12 @@ clearing, dispute management, payment gateways) plus freelance e-commerce builds
 [![GitHub Streak](https://streak-stats.demolab.com/?user=vianbas)](https://github.com/vianbas)
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="assets/stats-card-dark.svg">
-  <img alt="GitHub Stats" src="assets/stats-card-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/stats-dark.svg">
+  <img alt="GitHub Stats" src="assets/stats-light.svg">
+</picture>
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/top-langs-dark.svg">
+  <img alt="Top Languages" src="assets/top-langs-light.svg">
 </picture>
 
 | GitHub facts | |
@@ -28,21 +32,6 @@ clearing, dispute management, payment gateways) plus freelance e-commerce builds
 | 👥 Followers | 7 |
 | 🚀 PRs merged into external repos | 4 |
 | 📅 GitHub member since | 2015 |
-
----
-
-<!-- OPEN-SOURCE:START -->
-
-## 🌍 Open Source
-
-[![External PRs](https://img.shields.io/badge/External_PRs-4-6A9FB5?style=flat-square&logo=github&logoColor=white)](https://github.com/search?q=author%3Avianbas+type%3Apr+-user%3Avianbas&type=pullrequests)
-
-- **[SasanLabs/VulnerableApp #732](https://github.com/SasanLabs/VulnerableApp/pull/732)** — Fixed words glued together by line continuations in the i18n bundles. Merged Aug 2026.
-- **[SasanLabs/VulnerableApp #728](https://github.com/SasanLabs/VulnerableApp/pull/728)** — Fixed mojibake in the Swedish and Spanish translation bundles. Merged Aug 2026. VulnerableApp is a deliberately vulnerable web app for security training.
-- **[aovestdipaperino/tokensave #379](https://github.com/aovestdipaperino/tokensave/pull/379)** — Corrected `SECURITY.md` so it accurately describes FTS5 data retention — the `executable_body_fts` index stores full function bodies, not just metadata. Merged Aug 2026. tokensave is a code-intelligence MCP server.
-- **[magdalenasimamora/TheLast #1](https://github.com/magdalenasimamora/TheLast/pull/1)** — update save button function on 001 branch
-
-<!-- OPEN-SOURCE:END -->
 
 ---
 
