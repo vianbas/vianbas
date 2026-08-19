@@ -28,7 +28,7 @@ clearing, dispute management, payment gateways) plus freelance e-commerce builds
 
 | GitHub facts | |
 |---|---|
-| 💻 Public repositories | 43 |
+| 💻 Public repositories | 44 |
 | 👥 Followers | 7 |
 | 🚀 PRs merged into external repos | 10 |
 | 📅 GitHub member since | 2015 |
