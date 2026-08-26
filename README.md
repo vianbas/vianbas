@@ -1,4 +1,4 @@
-# Hi, I'm Viko Andri Bastian Manurung 👋
+# Hi, I'm Viko Andri Bastian Manurung
 
 **Fullstack & DevSecOps Engineer** — Jakarta, Indonesia.
 
