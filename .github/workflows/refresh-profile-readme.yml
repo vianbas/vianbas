@@ -2,7 +2,7 @@ name: Refresh Profile README
 
 on:
   schedule:
-    # Daily 06:30 UTC — keep the README facts table and stats cards fresh.
+    # Daily 06:30 UTC — keep the facts badges and contribution cards fresh.
     - cron: "30 6 * * *"
   workflow_dispatch:
 
@@ -27,48 +27,23 @@ jobs:
         with:
           node-version: 20
 
-      - name: Regenerate GitHub facts table
+      - name: Regenerate GitHub facts badges
         run: node scripts/refresh-profile-facts.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Generate stats card (dark)
-        uses: stats-organization/github-readme-stats-action@v2
-        with:
-          card: stats
-          options: username=vianbas&show_icons=true&hide_rank=true&bg_color=0D1117
-          path: assets/stats-dark.svg
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate stats card (light)
-        uses: stats-organization/github-readme-stats-action@v2
-        with:
-          card: stats
-          options: username=vianbas&show_icons=true&hide_rank=true&bg_color=ffffff
-          path: assets/stats-light.svg
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate top languages (dark)
-        uses: stats-organization/github-readme-stats-action@v2
-        with:
-          card: top-langs
-          options: username=vianbas&layout=compact&langs_count=6&bg_color=0D1117
-          path: assets/top-langs-dark.svg
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Generate top languages (light)
-        uses: stats-organization/github-readme-stats-action@v2
-        with:
-          card: top-langs
-          options: username=vianbas&layout=compact&langs_count=6&bg_color=ffffff
-          path: assets/top-langs-light.svg
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Regenerate contribution scan cards
+        run: node scripts/generate-contrib-svg.mjs
+        env:
+          GH_USERNAME: ${{ github.repository_owner }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OUTPUT_DIR: assets
 
       - name: Commit and push if changed
         id: commit
         run: |
           # Stage everything first so newly-generated (untracked) SVG cards
-          # from the action are included — `git diff` alone misses untracked files.
+          # are included — `git diff` alone misses untracked files.
           git add -A
           if git diff --cached --quiet; then
             echo "No facts changed — nothing to commit"
