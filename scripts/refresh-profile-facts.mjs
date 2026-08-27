@@ -1,16 +1,22 @@
 #!/usr/bin/env node
 /**
- * Refreshes the GitHub facts table in the profile README from the GitHub API.
+ * Refreshes the GitHub facts badge row in the profile README from the GitHub API.
  *
  * Facts updated:
- *   - 💻 Public repositories   (users API → public_repos)
- *   - 👥 Followers            (users API → followers)
- *   - 🚀 PRs merged into external repos  (search API, minus vianbas/*)
- *   - 📅 GitHub member since  (users API → created_at year)
+ *   - repositories   (users API → public_repos)
+ *   - merged PRs     (GraphQL, into public repos not owned by USER)
+ *   - member since   (users API → created_at year)
  *
- * The table is rewritten in place; when nothing changed the README is left
- * untouched so the calling workflow can detect that via `git diff` and skip
- * the commit. Always exits 0. Run locally with:
+ * These render as static shields.io badges whose values are baked into the
+ * URL. That matters: a shields *endpoint* badge keeps one fixed URL, so
+ * GitHub's camo proxy can serve a stale image long after the number changes.
+ * Baking the value into the URL changes the URL whenever the number does,
+ * which busts the cache and shows the new value immediately.
+ *
+ * The badge row between the `facts:start` / `facts:end` markers is rewritten
+ * in place; when nothing changed the README is left untouched so the calling
+ * workflow can detect that via `git diff` and skip the commit. Always exits 0.
+ * Run locally with:
  *     GITHUB_TOKEN=... node scripts/refresh-profile-facts.mjs
  */
 import { readFileSync, writeFileSync } from "node:fs";
@@ -90,30 +96,52 @@ async function countExternalMergedPRs() {
   return external;
 }
 
+/**
+ * shields.io path-form escaping: `-` doubles, `_` doubles, spaces become %20.
+ * Applied before the value goes into the badge URL.
+ */
+function badgeSegment(text) {
+  return String(text).replace(/-/g, "--").replace(/_/g, "__").replace(/ /g, "%20");
+}
+
+const BADGE_COLOR = "0A66C2";
+
+function badge(label, message) {
+  const alt = label.replace(/]/g, "");
+  return `![${alt}](https://img.shields.io/badge/${badgeSegment(label)}-${badgeSegment(message)}-${BADGE_COLOR}?style=flat-square)`;
+}
+
 const [user, externalMerged] = await Promise.all([
   gh(`/users/${USER}`),
   countExternalMergedPRs(),
 ]);
 
 const facts = {
-  "💻 Public repositories": String(user.public_repos),
-  "👥 Followers": String(user.followers),
-  "🚀 PRs merged into external repos": String(externalMerged),
-  "📅 GitHub member since": String(new Date(user.created_at).getUTCFullYear()),
+  repositories: String(user.public_repos),
+  "merged PRs": String(externalMerged),
+  "member since": String(new Date(user.created_at).getUTCFullYear()),
 };
 
 let readme = readFileSync(README, "utf8");
 let changed = false;
 
-for (const [label, value] of Object.entries(facts)) {
-  // Match `| 💻 Public repositories | 40 |` and replace the number cell.
-  const row = new RegExp(`(\\| ${label} \\| )\\d+( \\|)`, "u");
-  if (row.test(readme)) {
-    readme = readme.replace(row, `$1${value}$2`);
+const START = "<!-- facts:start -->";
+const END = "<!-- facts:end -->";
+const block = new RegExp(`${START}\\n[\\s\\S]*?\\n${END}`, "u");
+
+const row = Object.entries(facts)
+  .map(([label, value]) => badge(label, value))
+  .join("\n");
+const replacement = `${START}\n${row}\n${END}`;
+
+if (block.test(readme)) {
+  const next = readme.replace(block, replacement);
+  if (next !== readme) {
+    readme = next;
     changed = true;
-  } else {
-    console.warn(`Facts row not found (skipped): ${label}`);
   }
+} else {
+  console.warn(`Facts markers not found — README left untouched.`);
 }
 
 if (changed) {
