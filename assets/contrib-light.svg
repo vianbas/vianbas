@@ -428,6 +428,7 @@
       <rect x="784" y="120" width="11" height="11" rx="2.5" fill="#3C82D2"/>
       <rect x="784" y="134" width="11" height="11" rx="2.5" fill="#0A66C2"/>
       <rect x="784" y="148" width="11" height="11" rx="2.5" fill="#7FB0E8"/>
+      <rect x="784" y="162" width="11" height="11" rx="2.5" fill="#EBEDF0"/>
   </g>
   <g mask="url(#sweep)">
       <rect x="56" y="78" width="11" height="11" rx="2.5" fill="#E1E7EE"/>
@@ -800,6 +801,7 @@
       <rect x="784" y="120" width="11" height="11" rx="2.5" fill="#1F6BC4"/>
       <rect x="784" y="134" width="11" height="11" rx="2.5" fill="#054E97"/>
       <rect x="784" y="148" width="11" height="11" rx="2.5" fill="#5A97DF"/>
+      <rect x="784" y="162" width="11" height="11" rx="2.5" fill="#E1E7EE"/>
   </g>
 
   <g clip-path="url(#gridArea)">
@@ -825,7 +827,7 @@
     <circle cx="60" cy="223" r="4" fill="#1A7F37">
       <animate attributeName="opacity" values="1;0.25;1" dur="2.4s" repeatCount="indefinite"/>
     </circle>
-    <text x="72" y="227" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="10" letter-spacing="0.8" fill="#656D76">SCAN OK · 0 ANOMALIES · PEAK 139 · SYNCED 28 Aug 2026</text>
+    <text x="72" y="227" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="10" letter-spacing="0.8" fill="#656D76">SCAN OK · 0 ANOMALIES · PEAK 139 · SYNCED 29 Aug 2026</text>
   </g>
 
   <g>
@@ -845,7 +847,7 @@
     <text x="965" y="156" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="10" letter-spacing="1.2" fill="#656D76">LONGEST</text>
     <text x="965" y="173" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="15" font-weight="600" fill="#1F2328">61 days</text>
     
-    <text x="849" y="200" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="10" letter-spacing="1.2" fill="#656D76">NOW BUILDING · 2D AGO</text>
+    <text x="849" y="200" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="10" letter-spacing="1.2" fill="#656D76">NOW BUILDING · 3D AGO</text>
     <text x="849" y="217" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace" font-size="13" font-weight="600" fill="#1F2328">finwatch</text>
   </g>
 </svg>
