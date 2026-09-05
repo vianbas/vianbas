@@ -24,7 +24,7 @@ release. Two of the projects below, sprig and finwatch, came out of that work.
 
 <!-- facts:start -->
 ![repositories](https://img.shields.io/badge/repositories-50-0A66C2?style=flat-square)
-![merged PRs](https://img.shields.io/badge/merged%20PRs-22-0A66C2?style=flat-square)
+![merged PRs](https://img.shields.io/badge/merged%20PRs-23-0A66C2?style=flat-square)
 ![member since](https://img.shields.io/badge/member%20since-2015-0A66C2?style=flat-square)
 <!-- facts:end -->
 
